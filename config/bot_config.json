@@ -1,0 +1,23 @@
+{
+    "tea": "kamilla",
+    "menetrend": {
+        "hétfő": ["szünet"],
+        "kedd": ["16.00 Prog2 gyakorlat", "19.30 Short review: while True: learn()"],
+        "szerda": ["19:30 Life is Strange, Episode 4"],
+        "csütörtök": ["szünet"],
+        "péntek": ["Internetproblémák..."],
+        "szombat": ["19.30 Life is Strange, Episode 5"],
+        "vasárnap": ["szünet"]
+    },
+    "greetings": [
+        "Szép napot",
+        "Jó reggel",
+        "Üdvözlet",
+        "Viszlát",
+        "Örülök, hogy találkoztunk",
+        "Örülök, hogy láthattál",
+        "Szia, Uram",
+        "Szia"
+    ]
+
+}
