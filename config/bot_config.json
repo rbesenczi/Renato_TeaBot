@@ -1,23 +1,34 @@
 {
+    "teavagysor": "tea",
     "tea": "kamilla",
+    "sor": "The Hopping Hare pale ale ",
     "menetrend": {
-        "hétfő": ["szünet"],
-        "kedd": ["16.00 Prog2 gyakorlat", "19.30 Short review: while True: learn()"],
-        "szerda": ["19:30 Life is Strange, Episode 4"],
+        "hétfő": ["Gná, majd Until Dawn"],
+        "kedd": ["Until Dawn"],
+        "szerda": ["szünet"],
         "csütörtök": ["szünet"],
-        "péntek": ["Internetproblémák..."],
-        "szombat": ["19.30 Life is Strange, Episode 5"],
-        "vasárnap": ["szünet"]
+        "péntek": ["szünet"],
+        "szombat": ["Demon's Souls (remake)"],
+        "vasárnap": ["Tell Me Why"]
+    },
+    "linkek": {
+        "YouTube": ["https://www.youtube.com/RenatoBesenczi"],
+        "Twitter": ["https://twitter.com/rbesenczi"],
+        "Google Scholar": ["https://scholar.google.com/citations?user=iwy1gE4AAAAJ&hl=en"]
     },
     "greetings": [
-        "Szép napot",
-        "Jó reggel",
-        "Üdvözlet",
-        "Viszlát",
-        "Örülök, hogy találkoztunk",
-        "Örülök, hogy láthattál",
-        "Szia, Uram",
-        "Szia"
+        "Szép napot, ",
+        "BOY, ",
+        "Indeed, ",
+        "I do not need a snack, ",
+        "I do not know, ",
+        "Jó reggelt, ",
+        "Üdvözlet, ",
+        "Viszlát, ",
+        "Örülök, hogy találkoztunk, ",
+        "Örülök, hogy láthattál, ",
+        "Szia, Uram, ",
+        "Szia, ",
+        "The many shall suffer for the sins of "
     ]
-
 }

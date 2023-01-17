@@ -1,5 +1,5 @@
 from twitchio.ext import commands
-import json, csv, random
+import json, csv, random, codecs
 
 class Bot(commands.Bot):
 
@@ -16,47 +16,50 @@ class Bot(commands.Bot):
 
         message = ""
 
-        with open("../config/bot_config.json", "r") as config_file:
+        with codecs.open("../config/bot_config.json", encoding='utf-8') as config_file:
             botconfig = json.load(config_file)
 
-            message = botconfig["greetings"][random.randint(0,7)] + ", " + ctx.author.name + "! rbesenHi"
+            message = botconfig["greetings"][random.randint(0,12)] + ctx.author.name + "! rbesenHi"
 
         await ctx.send(message)
 
     @commands.command()
     async def info(self, ctx: commands.Context):
 
-        message = "Kedves " + ctx.author.name + "! Renato_TeaBot vagyok, egy fejlesztés alatt álló Twitch chatbot. Az alábbi parancsokra válaszolok: !szia !jelen !tea !menetrend. "
+        message = "Kedves " + ctx.author.name + "! Renato_TeaBot vagyok, egy fejlesztés alatt álló Twitch chatbot. Az alábbi parancsokra válaszolok: !szia !tea !menetrend. "
 
         await ctx.send(message)        
 
     @commands.command()
-    async def jelen(self, ctx: commands.Context):
+    async def tea(self, ctx: commands.Context):
 
-        message = "Kedves " + ctx.author.name + "! Nem szerepelsz a könyvelésben."
+        with codecs.open("../config/bot_config.json", encoding='utf-8') as config_file:
+            botconfig = json.load(config_file)
 
-        with open("../config/jelenlet.csv", newline='') as konyveles:
-            jelenlet = csv.DictReader(konyveles)
-            for row in jelenlet:
-                if row["name"].lower() == ctx.author.name:
-                    message = "Kedves " + ctx.author.name + "! A könyvelésben " + str(row["jelen"]) + " jelenléted van."
+        if (botconfig["teavagysor"]=="tea"):
+            message = "Ma " + botconfig["tea"] + "tea van, kedves " + ctx.author.name + ". rbesenTea"
+        else:
+            message = "Ma sör van. !sör"
 
         await ctx.send(message)
 
     @commands.command()
-    async def tea(self, ctx: commands.Context):
+    async def sör(self, ctx: commands.Context):
 
-        with open("../config/bot_config.json", "r") as config_file:
+        with codecs.open("../config/bot_config.json", encoding='utf-8') as config_file:
             botconfig = json.load(config_file)
 
-        message = "Ma " + botconfig["tea"] + "tea van, kedves " + ctx.author.name + ". rbesenTea"
+        if (botconfig["teavagysor"]=="sor"):
+            message = "Ma " + botconfig["sor"] + " sör van, kedves " + ctx.author.name + ". rbesenTea"
+        else:
+            message = "Ma tea van. !tea"
 
         await ctx.send(message)
 
     @commands.command()
     async def menetrend(self, ctx: commands.Context):
 
-        with open("../config/bot_config.json", "r") as config_file:
+        with codecs.open("../config/bot_config.json", encoding='utf-8') as config_file:
             botconfig = json.load(config_file)
 
             message = "A heti program, " + ctx.author.name + ": "
@@ -64,6 +67,24 @@ class Bot(commands.Bot):
             for key in botconfig["menetrend"]:
                 message += key + ": "
                 for elem in botconfig["menetrend"][key]:
+                    message += elem + " | "
+                message += " "
+
+            message += " Streamek mindig 20.00-tól!"
+
+        await ctx.send(message)
+
+    @commands.command()
+    async def linkek(self, ctx: commands.Context):
+
+        with codecs.open("../config/bot_config.json", encoding='utf-8') as config_file:
+            botconfig = json.load(config_file)
+
+            message = "Hasznos linkek, " + ctx.author.name + ": "
+
+            for key in botconfig["linkek"]:
+                message += key + ": "
+                for elem in botconfig["linkek"][key]:
                     message += elem + " | "
                 message += " "
 
