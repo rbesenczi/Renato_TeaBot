@@ -30,5 +30,20 @@
         "Szia, Uram, ",
         "Szia, ",
         "The many shall suffer for the sins of "
-    ]
+    ],
+    "deaths": {
+        "blade" : "I am Malenia, blade of Miquella",
+        "ish" : "Meg hal-tál :(",
+        "rot" : "Let your flesh be consumed. By the scarlet rot.",
+        "allguys" : ":( Fall Guys HeyGuys",
+        "nihil" : "NIHIL!",
+        "balta" : "Lemme axe u something real quick",
+        "iregiant" : "Aaargh! Aargh!",
+        "oolish" : "Put these foolish ambitions to rest.",
+        "cruci" : "Lecsaptak ketchupnak",
+        "dog" : "OhMyDog Meg lettél kutyulva.. :( OhMyDog",
+        "big" : "Úristen, very big!",
+        "god" : "God is dead. God remains dead. And we have killed him. How shall we comfort ourselves, the murderers of all murderers? What was holiest and mightiest of all that the world has yet owned has bled to death under our knives: who will wipe this blood off us? What water is there for us to clean ourselves? What festivals of atonement, what sacred games shall we have to invent? Is not the greatness of this deed too great for us? Must we ourselves not become gods simply to appear worthy of it?",
+        "paradontax" : "Segít megszüntetni és megelőzni a fogínyvérzést"
+    }
 }
