@@ -41,7 +41,13 @@ class Bot(commands.Bot):
         super().__init__(token=token, prefix='!', initial_channels=['#' + channel])
 
     def get_viewers(self):
+        return list(set(self.get_viewers_api()) | set(self.get_viewers_twio()))
+
+    def get_viewers_api(self):
         return sum([value for value in requests.get("http://tmi.twitch.tv/group/user/" + self.channel.lower() + "/chatters").json()["chatters"].values()], [])
+
+    def get_viewers_twio(self):
+        return [chtr.name.lower() for chtr in self.get_channel(self.channel).chatters]
 
     def write_db(self):
         write_json_data(self.botdatapath, self.botdata.copy())
@@ -67,6 +73,13 @@ class Bot(commands.Bot):
     
     async def consoleinputhandler(self):
         while True: #yolo
+            """
+            #DEBUG SHIZ
+            await ainput()
+            old_print(f"getv: {self.get_viewers()}")
+            old_print(f"api: {self.get_viewers_api()}")
+            old_print(f"twio: {self.get_viewers_twio()}")
+            """
             await self.get_channel(self.channel).send(await ainput())
 
     async def event_message(self, message): #bug in twitcho? message.content seem to lose the first character if it is a ':'
