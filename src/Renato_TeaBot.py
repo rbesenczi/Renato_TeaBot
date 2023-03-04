@@ -41,7 +41,13 @@ class Bot(commands.Bot):
         super().__init__(token=token, prefix='!', initial_channels=['#' + channel])
 
     def get_viewers(self):
+        return list(set(self.get_viewers_api()) | set(self.get_viewers_twio()))
+
+    def get_viewers_api(self):
         return sum([value for value in requests.get("http://tmi.twitch.tv/group/user/" + self.channel.lower() + "/chatters").json()["chatters"].values()], [])
+
+    def get_viewers_twio(self):
+        return [chtr.name.lower() for chtr in self.get_channel(self.channel).chatters]
 
     def write_db(self):
         write_json_data(self.botdatapath, self.botdata.copy())
@@ -49,7 +55,7 @@ class Bot(commands.Bot):
     async def csp_spend(self, ctx, price):
         name = ctx.author.name.lower()
 
-        if(self.botdata['csatornapont'].get(name, 0) > price):
+        if(self.botdata['csatornapont'].get(name, 0) >= price):
             self.botdata['csatornapont'][name] -= price
             self.write_db()
             return True
@@ -66,7 +72,14 @@ class Bot(commands.Bot):
         await self.consoleinputhandler()
     
     async def consoleinputhandler(self):
-        while True:
+        while True: #yolo
+            """
+            #DEBUG SHIZ
+            await ainput()
+            old_print(f"getv: {self.get_viewers()}")
+            old_print(f"api: {self.get_viewers_api()}")
+            old_print(f"twio: {self.get_viewers_twio()}")
+            """
             await self.get_channel(self.channel).send(await ainput())
 
     async def event_message(self, message): #bug in twitcho? message.content seem to lose the first character if it is a ':'
@@ -81,18 +94,23 @@ class Bot(commands.Bot):
 
     @routines.routine(minutes=2) #the update period of the site is about 2 minutes
     async def watchtimer(self):
-        db_changed = False
+        db_changed = False #no need to write to the disk unnecessarily
         currentviewerslist = self.get_viewers()
+
+        #remove the bot and the streamer from the viewers
         if self.nick.lower() in currentviewerslist: currentviewerslist.remove(self.nick.lower())
         if self.channel.lower() in currentviewerslist: currentviewerslist.remove(self.channel.lower())
 
-        viewer_cache_unmodified = self.viewer_cache.copy()
-        for tempviewer in viewer_cache_unmodified:
+        #remove the viewers who are no longer watching from the list
+        #self.viewer_cache stores the viewers list from the last iteration with the recorded watchtime
+        for tempviewer in self.viewer_cache.copy(): #this needs to be a copy, removing items while iterating trough is not a good idea
             if tempviewer not in currentviewerslist: del self.viewer_cache[tempviewer]
 
+        #using .get is necessary here, might be a new user
         for viewer in currentviewerslist:
             self.viewer_cache[viewer] = self.viewer_cache.get(viewer, 0) + 2
 
+            #extra points for extended watchtime
             if self.viewer_cache[viewer] % 5 < 2:
                 self.botdata["csatornapont"][viewer] = self.botdata["csatornapont"].get(viewer, 0) + 10
                 db_changed = True
@@ -101,12 +119,8 @@ class Bot(commands.Bot):
                 self.botdata["csatornapont"][viewer] = self.botdata["csatornapont"].get(viewer, 0) + 50
                 db_changed = True
         
+        #write the changes to disk
         if(db_changed): self.write_db()
-
-    @commands.command()
-    async def hidratálj(self, ctx: commands.Context):
-        if(await self.csp_spend(ctx, 200)):
-            await ctx.send(f"{ctx.author.mention} kéri, hogy hidratálj! rbesenTea")
 
     @commands.command()
     async def cheer(self, ctx: commands.Context, arg=None):
@@ -157,6 +171,23 @@ class Bot(commands.Bot):
     @commands.command()
     async def parancsok(self, ctx: commands.Context):
         await ctx.send(", ".join(["!" + parancs for parancs in self.commands]))
+
+    @commands.command()
+    async def hi(self, ctx: commands.Context):
+        await ctx.send(f"{ctx.author.mention} rbesenHi")
+
+    @commands.command()
+    async def jelen(self, ctx: commands.Context):
+        await ctx.send(f"{ctx.author.mention} rbesenJelen")
+
+    @commands.command()
+    async def bug(self, ctx: commands.Context):
+        await ctx.send("rbesenBug")
+
+    @commands.command()
+    async def hidratálj(self, ctx: commands.Context):
+        if(await self.csp_spend(ctx, 200)):
+            await ctx.send(f"{ctx.author.mention} kéri, hogy hidratálj! rbesenTea")
 
     @commands.command()
     async def szia(self, ctx: commands.Context):
