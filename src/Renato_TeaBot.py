@@ -1,7 +1,7 @@
 from twitchio.ext import commands, routines
 from datetime import datetime
 from aioconsole import ainput
-import json, random, requests, os
+import json, random, os
 
 old_print = print
 def timestamped_print(*args, **kwargs): old_print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " |  ", *args, **kwargs)
@@ -41,12 +41,6 @@ class Bot(commands.Bot):
         super().__init__(token=token, prefix='!', initial_channels=['#' + channel])
 
     def get_viewers(self):
-        return list(set(self.get_viewers_api()) | set(self.get_viewers_twio()))
-
-    def get_viewers_api(self):
-        return sum([value for value in requests.get("http://tmi.twitch.tv/group/user/" + self.channel.lower() + "/chatters").json()["chatters"].values()], [])
-
-    def get_viewers_twio(self):
         return [chtr.name.lower() for chtr in self.get_channel(self.channel).chatters]
 
     def write_db(self):
@@ -54,6 +48,8 @@ class Bot(commands.Bot):
 
     async def csp_spend(self, ctx, price):
         name = ctx.author.name.lower()
+
+        if name == self.nick.lower() or name == self.channel.lower(): return True
 
         if(self.botdata['csatornapont'].get(name, 0) >= price):
             self.botdata['csatornapont'][name] -= price
@@ -123,6 +119,33 @@ class Bot(commands.Bot):
         if(db_changed): self.write_db()
 
     @commands.command()
+    async def keksz(self, ctx: commands.Context, arg=None, arg2=None):
+        if arg == None: await ctx.send(f"{ctx.author.mention}, a parancs használata: !keksz <kinek> (<mennyit>), 1db keksz 100 csp-be kerül.")
+
+        else: #has argument
+            if arg[0] == '@': arg = arg[1:] #remove mention symbol
+            arg = arg.lower()
+            if arg in self.get_viewers() or arg in self.botdata["csatornapont"] or arg == self.nick.lower() or arg == self.channel.lower(): #current viewer or name in database
+                
+                if arg2 == None: #did not specify a number, let's assume it is 1
+                    if(await self.csp_spend(ctx, 100)):
+                        if arg != self.nick.lower() and arg != self.channel.lower(): #no need to keep track of this
+                            self.botdata["csatornapont"][arg] += 100
+                            self.write_db()
+                        await ctx.send(f"NomNom Jár a keksz @{arg}!")
+
+                elif arg2.isnumeric() and int(arg2) > 0: #integer and greater than zero
+                    if(await self.csp_spend(ctx, 100 * int(arg2))):
+                        if arg != self.nick.lower() and arg != self.channel.lower(): #no need to keep track of this
+                            self.botdata["csatornapont"][arg] += 100 * int(arg2)
+                            self.write_db()
+                        await ctx.send(f"NomNom Jár {int(arg2)} db keksz @{arg}!")
+
+                else: await ctx.send(f"{ctx.author.mention}, második argumentumnak pozitív egész számot adj meg!") #trying something sneaky huh?
+            
+            else: await ctx.send(f"Nem található {arg} nevű néző!") #trying something sneaky huh?
+
+    @commands.command()
     async def cheer(self, ctx: commands.Context, arg=None):
         if(arg == None): arg = "1"
         if arg.isnumeric() and int(arg) > 0:
@@ -157,7 +180,10 @@ class Bot(commands.Bot):
 
     @commands.command()
     async def csp(self, ctx: commands.Context):
-        await ctx.send(f"Kedves {ctx.author.mention}, {self.botdata['csatornapont'].get(ctx.author.name.lower(), 0)} csatornapontod van.")
+        if ctx.author.name.lower() == self.nick.lower() or ctx.author.name.lower() == self.channel.lower():
+            await ctx.send(f"Kedves {ctx.author.mention}, végtelen sok csatornapontod van.")
+        else:
+            await ctx.send(f"Kedves {ctx.author.mention}, {self.botdata['csatornapont'].get(ctx.author.name.lower(), 0)} csatornapontod van.")
 
     @commands.command()
     async def F(self, ctx: commands.Context, arg=None):
