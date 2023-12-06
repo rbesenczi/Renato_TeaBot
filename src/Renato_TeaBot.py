@@ -203,6 +203,14 @@ class Bot(commands.Bot):
         await ctx.send(f"{ctx.author.mention} rbesenHi")
 
     @commands.command()
+    async def repo(self, ctx: commands.Context):
+        await ctx.send(f"{ctx.author.mention}, itt találod a kódot: https://github.com/rbesenczi/newMSM")
+
+    @commands.command()
+    async def guide(self, ctx: commands.Context):
+        await ctx.send(f"{ctx.author.mention}, itt találsz egy kis leírást: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/MSM")
+
+    @commands.command()
     async def jelen(self, ctx: commands.Context):
         await ctx.send(f"{ctx.author.mention} rbesenJelen")
 
@@ -252,7 +260,7 @@ class Bot(commands.Bot):
 def main():
     auth = load_json_data("../config/auth.json")
 
-    bot = Bot(auth["token"], auth["channel"], "../config/bot_config.json", "../config/bot_db.json")
+    bot = Bot(auth["token"], auth["channel"], "/media/renato/SSD/bot_config.json", "/media/renato/SSD/bot_db.json")
     bot.run()
 
 if __name__ == "__main__":
