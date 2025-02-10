@@ -203,14 +203,6 @@ class Bot(commands.Bot):
         await ctx.send(f"{ctx.author.mention} rbesenHi")
 
     @commands.command()
-    async def repo(self, ctx: commands.Context):
-        await ctx.send(f"{ctx.author.mention}, itt találod a kódot: https://github.com/rbesenczi/newMSM")
-
-    @commands.command()
-    async def guide(self, ctx: commands.Context):
-        await ctx.send(f"{ctx.author.mention}, itt találsz egy kis leírást: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/MSM")
-
-    @commands.command()
     async def jelen(self, ctx: commands.Context):
         await ctx.send(f"{ctx.author.mention} rbesenJelen")
 
@@ -233,19 +225,37 @@ class Bot(commands.Bot):
 
     @commands.command()
     async def tea(self, ctx: commands.Context):
-        if (self.botconfig["teavagysor"] == "tea"):
+        ital = self.botconfig["teaborsor"]
+        if (ital == "tea"):
             message = "Ma " + self.botconfig["tea"] + "tea van, kedves " + ctx.author.mention + ". rbesenTea"
-        else:
+        if (ital == "sor"):
             message = "Ma sör van. !sör"
+        if (ital == "bor"):
+            message = "Ma bor van. !bor"
 
         await ctx.send(message)
 
     @commands.command()
     async def sör(self, ctx: commands.Context):
-        if (self.botconfig["teavagysor"] == "sor"):
+        ital = self.botconfig["teaborsor"]
+        if (ital == "sor"):
             message = "Ma " + self.botconfig["sor"] + " sör van, kedves " + ctx.author.mention + ". rbesenTea"
-        else:
+        if (ital == "tea"):
             message = "Ma tea van. !tea"
+        if (ital == "bor"):
+            message = "Ma bor van. !bor"
+
+        await ctx.send(message)
+
+    @commands.command()
+    async def bor(self, ctx: commands.Context):
+        ital = self.botconfig["teaborsor"]
+        if (ital == "bor"):
+            message = "Ma " + self.botconfig["bor"] + " bor van, kedves " + ctx.author.mention + ". rbesenTea"
+        if (ital == "tea"):
+            message = "Ma tea van. !tea"
+        if (ital == "sor"):
+            message = "Ma sör van. !sör"
 
         await ctx.send(message)
 
@@ -260,7 +270,7 @@ class Bot(commands.Bot):
 def main():
     auth = load_json_data("../config/auth.json")
 
-    bot = Bot(auth["token"], auth["channel"], "/media/renato/SSD/bot_config.json", "/media/renato/SSD/bot_db.json")
+    bot = Bot(auth["token"], auth["channel"], "G:/bot_config.json", "G:/bot_db.json")
     bot.run()
 
 if __name__ == "__main__":
