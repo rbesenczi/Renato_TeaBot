@@ -1,15 +1,16 @@
 {
-    "teavagysor": "tea",
-    "tea": "kamilla",
-    "sor": "The Hopping Hare pale ale ",
+    "teaborsor": "bor",
+    "tea": "Twinings gyümölcs",
+    "sor": "Badger Tangle Foot ",
+    "bor": "Cali Red ",
     "menetrend": {
-        "hétfő": ["Gná, majd Until Dawn"],
-        "kedd": ["Until Dawn"],
+        "hétfő": ["Dark Souls II"],
+        "kedd": ["szünet"],
         "szerda": ["szünet"],
-        "csütörtök": ["szünet"],
-        "péntek": ["szünet"],
-        "szombat": ["Demon's Souls (remake)"],
-        "vasárnap": ["Tell Me Why"]
+        "csütörtök": ["The Last of Us Part II"],
+        "péntek": ["The Last of Us Part II"],
+        "szombat": ["Dark Souls II"],
+        "vasárnap": ["The Last of Us Part II"]
     },
     "linkek": {
         "YouTube": ["https://www.youtube.com/RenatoBesenczi"],
@@ -44,6 +45,7 @@
         "dog" : "OhMyDog Meg lettél kutyulva.. :( OhMyDog",
         "big" : "Úristen, very big!",
         "god" : "God is dead. God remains dead. And we have killed him. How shall we comfort ourselves, the murderers of all murderers? What was holiest and mightiest of all that the world has yet owned has bled to death under our knives: who will wipe this blood off us? What water is there for us to clean ourselves? What festivals of atonement, what sacred games shall we have to invent? Is not the greatness of this deed too great for us? Must we ourselves not become gods simply to appear worthy of it?",
-        "paradontax" : "Segít megszüntetni és megelőzni a fogínyvérzést"
+        "paradontax" : "Segít megszüntetni és megelőzni a fogínyvérzést",
+        "ights" : "Valhalla salutes your commitment to fights."
     }
 }
